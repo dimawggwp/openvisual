@@ -97,7 +97,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 
 /* ============ LAYOUT ============ */
 .wrap{width:min(1240px,100% - var(--pad)*2);margin-inline:auto}
-section{padding:clamp(72px,11vw,150px) 0;position:relative}
+section{padding:clamp(40px,6vw,84px) 0;position:relative}
 
 /* ============ HEADER ============ */
 header{position:fixed;top:0;left:0;right:0;z-index:100;transition:.45s var(--ease)}
@@ -151,7 +151,7 @@ header.solid{background:rgba(7,7,12,.72);backdrop-filter:blur(18px);border-botto
 @keyframes drop{from{opacity:0;transform:translateY(-14px)}}
 
 /* ============ HERO ============ */
-.hero{min-height:100svh;display:flex;align-items:center;padding-top:110px;padding-bottom:60px}
+.hero{min-height:92svh;display:flex;align-items:center;padding-top:110px;padding-bottom:40px}
 .pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 10px;border-radius:99px;
   background:var(--surface);border:1px solid var(--stroke-2);font-size:13px;color:var(--muted);backdrop-filter:blur(10px)}
 .live{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(182,255,61,.7);animation:live 2s infinite}
@@ -162,7 +162,7 @@ h1{font-size:clamp(38px,8.4vw,104px);margin:24px 0 0;font-weight:700}
 @keyframes flow{50%{background-position:100% 0}}
 .hero-sub{max-width:56ch;margin-top:26px;font-size:clamp(15.5px,1.9vw,19px);color:var(--muted)}
 .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
-.hero-stats{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,64px);margin-top:64px;padding-top:34px;border-top:1px solid var(--stroke)}
+.hero-stats{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,64px);margin-top:52px;padding-top:30px;border-top:1px solid var(--stroke)}
 .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4.4vw,46px);font-weight:700;
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .stat span{font-size:13px;color:var(--muted);letter-spacing:.04em}
@@ -182,14 +182,12 @@ h1{font-size:clamp(38px,8.4vw,104px);margin:24px 0 0;font-weight:700}
 .mq-track span::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--grad);flex:none}
 
 /* ============ SECTION HEAD ============ */
-.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan)}
-.eyebrow::before{content:'';width:26px;height:1px;background:var(--cyan)}
-h2{font-size:clamp(29px,5.3vw,62px);margin:18px 0 0}
-.sec-sub{max-width:62ch;margin-top:20px;color:var(--muted);font-size:clamp(15px,1.7vw,17.5px)}
+h2{font-size:clamp(29px,5.3vw,62px);margin:0}
+.sec-sub{max-width:62ch;margin-top:18px;color:var(--muted);font-size:clamp(15px,1.7vw,17.5px)}
 .head-row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between}
 
 /* ============ CARDS ============ */
-.grid{display:grid;gap:20px;margin-top:56px}
+.grid{display:grid;gap:20px;margin-top:44px}
 .g-3{grid-template-columns:repeat(auto-fit,minmax(285px,1fr))}
 .g-2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
 .card{position:relative;padding:clamp(24px,3vw,36px);border-radius:var(--radius);border:1px solid var(--stroke);
@@ -213,7 +211,7 @@ h2{font-size:clamp(29px,5.3vw,62px);margin:18px 0 0}
 .card::before{background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(var(--gl,124,92,255),.2),transparent 65%)}
 
 /* ============ PROCESS ============ */
-.steps{counter-reset:s;display:grid;gap:16px;margin-top:56px}
+.steps{counter-reset:s;display:grid;gap:16px;margin-top:44px}
 .step{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,34px);align-items:start;
   padding:clamp(22px,3vw,30px);border-radius:var(--radius);border:1px solid var(--stroke);background:var(--surface);transition:.4s var(--ease)}
 .step:hover{border-color:var(--stroke-2);transform:translateX(8px);background:rgba(255,255,255,.055)}
@@ -221,25 +219,8 @@ h2{font-size:clamp(29px,5.3vw,62px);margin:18px 0 0}
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
 .step p{color:var(--muted);margin-top:9px;font-size:15px}
 
-/* ============ WORK ============ */
-.work{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--stroke);
-  min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(22px,3vw,34px);
-  transition:.5s var(--ease)}
-.work::after{content:'';position:absolute;inset:0;z-index:0;transition:transform .8s var(--ease),filter .5s}
-.work.w1::after{background:linear-gradient(135deg,#7c5cff,#22d3ee)}
-.work.w2::after{background:linear-gradient(135deg,#ff4fd8,#ffb703)}
-.work.w3::after{background:linear-gradient(135deg,#22d3ee,#b6ff3d)}
-.work.w4::after{background:linear-gradient(135deg,#ffb703,#7c5cff)}
-.work>*{position:relative;z-index:2}
-.work::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(5,5,10,.94) 8%,rgba(5,5,10,.25) 70%)}
-.work:hover{transform:translateY(-7px);box-shadow:var(--shadow)}
-.work:hover::after{transform:scale(1.12) rotate(3deg);filter:saturate(1.3)}
-.work h3{font-size:clamp(20px,2.4vw,26px)}
-.work p{color:#c9c7d8;font-size:14.5px;margin-top:8px}
-.work .tag{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.3);color:#fff}
-
 /* ============ FAQ ============ */
-.faq{margin-top:48px;border-top:1px solid var(--stroke)}
+.faq{margin-top:36px;border-top:1px solid var(--stroke)}
 .q{border-bottom:1px solid var(--stroke)}
 .q button{width:100%;background:none;border:0;text-align:left;padding:24px 46px 24px 0;cursor:pointer;
   position:relative;font-family:'Space Grotesk',sans-serif;font-size:clamp(16px,2vw,20px);font-weight:500;transition:.3s}
@@ -252,7 +233,7 @@ h2{font-size:clamp(29px,5.3vw,62px);margin:18px 0 0}
 .q .a p{padding:0 40px 26px 0;color:var(--muted);font-size:15.5px}
 
 /* ============ CONTACT ============ */
-.contact-box{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,54px);margin-top:56px;
+.contact-box{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,54px);margin-top:44px;
   padding:clamp(24px,4vw,52px);border-radius:clamp(24px,3vw,34px);
   border:1px solid var(--stroke);background:linear-gradient(160deg,rgba(124,92,255,.13),rgba(34,211,238,.06) 55%,transparent);
   backdrop-filter:blur(14px)}
@@ -341,7 +322,6 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
     </a>
     <ul class="menu" id="menu">
       <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
-      <li><a href="#work" data-i18n="nav.work">Работы</a></li>
       <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
       <li><a href="#about" data-i18n="nav.about">О нас</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
@@ -374,7 +354,7 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
     </p>
     <div class="hero-cta rv rv-d3">
       <a class="btn btn-main" href="#contact" data-i18n="hero.cta1">Получить консультацию</a>
-      <a class="btn btn-ghost" href="#work" data-i18n="hero.cta2">Смотреть работы</a>
+      <a class="btn btn-ghost" href="#services" data-i18n="hero.cta2">Смотреть услуги</a>
     </div>
     <div class="hero-stats rv rv-d4">
       <div class="stat"><b data-count="120" data-suffix="+">0</b><span data-i18n="hero.s1">проектов запущено</span></div>
@@ -401,13 +381,12 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
   <div class="wrap">
     <div class="head-row">
       <div>
-        <span class="eyebrow rv" data-i18n="srv.eyebrow">Услуги</span>
-        <h2 class="rv rv-d1"><span data-i18n="srv.h2a">Что мы</span> <span class="grad-txt" data-i18n="srv.h2b">делаем</span></h2>
-        <p class="sec-sub rv rv-d2" data-i18n="srv.sub">
+        <h2 class="rv"><span data-i18n="srv.h2a">Что мы</span> <span class="grad-txt" data-i18n="srv.h2b">делаем</span></h2>
+        <p class="sec-sub rv rv-d1" data-i18n="srv.sub">
           Полный цикл: от первого разговора об идее до запуска и поддержки. Без подрядчиков-посредников.
         </p>
       </div>
-      <a class="btn btn-ghost rv rv-d3" href="#contact" data-i18n="srv.cta">Рассчитать стоимость</a>
+      <a class="btn btn-ghost rv rv-d2" href="#contact" data-i18n="srv.cta">Рассчитать стоимость</a>
     </div>
 
     <div class="grid g-3">
@@ -456,44 +435,11 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
   </div>
 </section>
 
-<!-- WORK -->
-<section id="work">
-  <div class="wrap">
-    <span class="eyebrow rv" data-i18n="work.eyebrow">Портфолио</span>
-    <h2 class="rv rv-d1"><span data-i18n="work.h2a">Проекты, которыми</span> <span class="grad-txt" data-i18n="work.h2b">гордимся</span></h2>
-    <p class="sec-sub rv rv-d2" data-i18n="work.sub">Разные сферы и страны — принцип один: понятно, быстро, красиво.</p>
-
-    <div class="grid g-2">
-      <a class="work w1 rv" href="#contact">
-        <div class="tags"><span class="tag">E-commerce</span><span class="tag" data-i18n="work.1c">Казахстан</span></div>
-        <h3 data-i18n="work.1t">AURA Store</h3>
-        <p data-i18n="work.1d">Магазин косметики с Kaspi-оплатой. Конверсия выросла в 2,4 раза за первый месяц.</p>
-      </a>
-      <a class="work w2 rv rv-d1" href="#contact">
-        <div class="tags"><span class="tag">Landing</span><span class="tag" data-i18n="work.2c">ОАЭ</span></div>
-        <h3 data-i18n="work.2t">Nova Fit Dubai</h3>
-        <p data-i18n="work.2d">Лендинг фитнес-клуба с онлайн-записью. 340 заявок за первые две недели рекламы.</p>
-      </a>
-      <a class="work w3 rv rv-d2" href="#contact">
-        <div class="tags"><span class="tag">Web App</span><span class="tag" data-i18n="work.3c">Германия</span></div>
-        <h3 data-i18n="work.3t">Logi.Track</h3>
-        <p data-i18n="work.3d">Панель для логистики: заказы, водители, статусы в реальном времени.</p>
-      </a>
-      <a class="work w4 rv rv-d3" href="#contact">
-        <div class="tags"><span class="tag">Branding</span><span class="tag" data-i18n="work.4c">Казахстан</span></div>
-        <h3 data-i18n="work.4t">Qant Coffee</h3>
-        <p data-i18n="work.4d">Фирменный стиль и сайт сети кофеен: меню, локации, доставка.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- PROCESS -->
 <section id="process">
   <div class="wrap">
-    <span class="eyebrow rv" data-i18n="proc.eyebrow">Как мы работаем</span>
-    <h2 class="rv rv-d1"><span data-i18n="proc.h2a">От идеи до</span> <span class="grad-txt" data-i18n="proc.h2b">запуска</span></h2>
-    <p class="sec-sub rv rv-d2" data-i18n="proc.sub">Прозрачные этапы. Вы всегда знаете, что происходит и когда будет готово.</p>
+    <h2 class="rv"><span data-i18n="proc.h2a">От идеи до</span> <span class="grad-txt" data-i18n="proc.h2b">запуска</span></h2>
+    <p class="sec-sub rv rv-d1" data-i18n="proc.sub">Прозрачные этапы. Вы всегда знаете, что происходит и когда будет готово.</p>
 
     <div class="steps">
       <div class="step rv"><div>
@@ -525,9 +471,8 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
   <div class="wrap">
     <div class="head-row">
       <div>
-        <span class="eyebrow rv" data-i18n="ab.eyebrow">О нас</span>
-        <h2 class="rv rv-d1"><span data-i18n="ab.h2a">Небольшая команда,</span><br><span class="grad-txt" data-i18n="ab.h2b">большая ответственность</span></h2>
-        <p class="sec-sub rv rv-d2" data-i18n="ab.sub">
+        <h2 class="rv"><span data-i18n="ab.h2a">Небольшая команда,</span><br><span class="grad-txt" data-i18n="ab.h2b">большая ответственность</span></h2>
+        <p class="sec-sub rv rv-d1" data-i18n="ab.sub">
           OPENVISUAL начинался как два дизайнера с ноутбуками. Сейчас это команда дизайна, разработки и продвижения,
           которая работает с клиентами из Казахстана, Европы, США и Ближнего Востока. Ведём проекты на русском,
           казахском и английском — часовой пояс не проблема.
@@ -549,10 +494,9 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
 <!-- FAQ -->
 <section id="faq">
   <div class="wrap">
-    <span class="eyebrow rv" data-i18n="faq.eyebrow">FAQ</span>
-    <h2 class="rv rv-d1"><span data-i18n="faq.h2a">Частые</span> <span class="grad-txt" data-i18n="faq.h2b">вопросы</span></h2>
+    <h2 class="rv"><span data-i18n="faq.h2a">Частые</span> <span class="grad-txt" data-i18n="faq.h2b">вопросы</span></h2>
 
-    <div class="faq rv rv-d2">
+    <div class="faq rv rv-d1">
       <div class="q"><button type="button"><span data-i18n="q1">Сколько стоит сайт?</span></button>
         <div class="a"><p data-i18n="a1">Лендинг — от 150 000 ₸, корпоративный сайт — от 350 000 ₸, интернет-магазин — от 600 000 ₸. Точная сумма зависит от объёма: назовите задачу в WhatsApp, и мы посчитаем в тот же день.</p></div></div>
       <div class="q"><button type="button"><span data-i18n="q2">У меня только идея, без текстов и фото. Возьмётесь?</span></button>
@@ -572,10 +516,9 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
 <!-- CONTACT -->
 <section id="contact">
   <div class="wrap">
-    <span class="eyebrow rv" data-i18n="ct.eyebrow">Консультация</span>
-    <h2 class="rv rv-d1"><span data-i18n="ct.h2a">Расскажите идею —</span><br><span class="grad-txt" data-i18n="ct.h2b">мы разберём её бесплатно</span></h2>
+    <h2 class="rv"><span data-i18n="ct.h2a">Расскажите идею —</span><br><span class="grad-txt" data-i18n="ct.h2b">мы разберём её бесплатно</span></h2>
 
-    <div class="contact-box rv rv-d2">
+    <div class="contact-box rv rv-d1">
       <div>
         <h3 style="font-size:clamp(19px,2.3vw,24px)" data-i18n="ct.left">Ответим быстрее, чем вы допьёте кофе</h3>
         <p style="color:var(--muted);margin-top:14px;font-size:15px" data-i18n="ct.leftd">
@@ -650,7 +593,6 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
       </div>
       <ul class="f-links">
         <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
-        <li><a href="#work" data-i18n="nav.work">Работы</a></li>
         <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
         <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
       </ul>
@@ -801,15 +743,15 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
 
   /* ---------- i18n (RU default, EN dictionary) ---------- */
   const EN = {
-    'nav.services':'Services','nav.work':'Work','nav.process':'Process','nav.about':'About','nav.faq':'FAQ',
+    'nav.services':'Services','nav.process':'Process','nav.about':'About','nav.faq':'FAQ',
     'nav.contact':'Contact','nav.cta':'Start a project',
     'hero.pill':'Working worldwide · We reply within 15 minutes',
     'hero.h1a':'We turn your idea','hero.h1b':'into a website that sells',
     'hero.sub':'OPENVISUAL is a design and web development studio. Tell us your idea in a few words and we will break it down, estimate the timeline and show you what your website will look like — free of charge.',
-    'hero.cta1':'Get a free consultation','hero.cta2':'View our work',
+    'hero.cta1':'Get a free consultation','hero.cta2':'View our services',
     'hero.s1':'projects launched','hero.s2':'client countries','hero.s3':'average landing time','hero.s4':'come back again',
     'hero.scroll':'SCROLL',
-    'srv.eyebrow':'Services','srv.h2a':'What we','srv.h2b':'do',
+    'srv.h2a':'What we','srv.h2b':'do',
     'srv.sub':'Full cycle: from the first conversation about your idea to launch and support. No middlemen.',
     'srv.cta':'Get a quote',
     's1.t':'Landing pages','s1.d':'One-pagers for product launches and ad campaigns. Strong structure, fast loading, leads delivered straight to WhatsApp.',
@@ -818,25 +760,19 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
     's4.t':'UI/UX design','s4.d':'Prototype and design in Figma before a single line of code. You see and approve every screen upfront.',
     's5.t':'Branding','s5.d':'Logo, colours, fonts and social media kit — so your site and Instagram look like one company.',
     's6.t':'SEO & support','s6.d':'We get you into search, monitor speed and refresh content. Your site keeps living after handover.',
-    'work.eyebrow':'Portfolio','work.h2a':'Projects we are','work.h2b':'proud of',
-    'work.sub':'Different industries and countries — one principle: clear, fast, beautiful.',
-    'work.1t':'AURA Store','work.1d':'Cosmetics store with Kaspi payments. Conversion grew 2.4× in the first month.','work.1c':'Kazakhstan',
-    'work.2t':'Nova Fit Dubai','work.2d':'Fitness club landing with online booking. 340 leads in the first two weeks of ads.','work.2c':'UAE',
-    'work.3t':'Logi.Track','work.3d':'Logistics dashboard: orders, drivers and statuses in real time.','work.3c':'Germany',
-    'work.4t':'Qant Coffee','work.4d':'Brand identity and website for a coffee chain: menu, locations, delivery.','work.4c':'Kazakhstan',
-    'proc.eyebrow':'How we work','proc.h2a':'From idea to','proc.h2b':'launch',
+    'proc.h2a':'From idea to','proc.h2b':'launch',
     'proc.sub':'Clear stages. You always know what is happening and when it will be ready.',
     'p1.t':'Intro & consultation','p1.d':'Message us on WhatsApp or submit the form. We ask about your idea, audience and goals. Free, no strings attached.',
     'p2.t':'Estimate & structure','p2.d':'We send the page list, timeline and a fixed price. No moving numbers mid-project.',
     'p3.t':'Design in Figma','p3.d':'We show mockups and iterate until you say yes. Coding starts only after approval.',
     'p4.t':'Development & testing','p4.d':'Responsive build, tested on phones and tablets, optimised for speed, forms and analytics connected.',
     'p5.t':'Launch & support','p5.d':'Domain, hosting, handover of all access, short training. Then 30 days of free edits.',
-    'ab.eyebrow':'About','ab.h2a':'A small team,','ab.h2b':'a big sense of ownership',
+    'ab.h2a':'A small team,','ab.h2b':'a big sense of ownership',
     'ab.sub':'OPENVISUAL started as two designers with laptops. Today we are a design, development and marketing team working with clients in Kazakhstan, Europe, the US and the Middle East. We run projects in Russian, Kazakh and English — time zones are not an issue.',
     'ab1.t':'Fixed price','ab1.d':'Once we agree on the sum, it does not grow. All edits within the agreed scope are included.',
     'ab2.t':'Deadlines, not promises','ab2.d':'Landing from 3 days, online store from 2 weeks. The delivery date is set before we start.',
     'ab3.t':'Real communication','ab3.d':'One manager for the whole project, replies on WhatsApp within 15 minutes during business hours.',
-    'faq.eyebrow':'FAQ','faq.h2a':'Frequently asked','faq.h2b':'questions',
+    'faq.h2a':'Frequently asked','faq.h2b':'questions',
     'q1':'How much does a website cost?',
     'a1':'Landing page from $300, corporate site from $700, online store from $1,200. The exact figure depends on scope — tell us the task on WhatsApp and we will quote the same day.',
     'q2':'I only have an idea, no text or photos. Will you take it on?',
@@ -849,7 +785,7 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(25
     'a5':'30 days of free edits and technical support. After that, optional monthly maintenance: updates, backups, speed, SEO.',
     'q6':'How does payment work?',
     'a6':'Usually 50% upfront and 50% on delivery. Large projects are split into milestones. We work under contract and provide invoices.',
-    'ct.eyebrow':'Consultation','ct.h2a':'Tell us your idea —','ct.h2b':'we will review it for free',
+    'ct.h2a':'Tell us your idea —','ct.h2b':'we will review it for free',
     'ct.left':'We reply before your coffee gets cold',
     'ct.leftd':'Fill in the form and your request goes straight to our WhatsApp. Or message us directly if that is easier.',
     'ct.phone':'Phone','ct.geo':'Coverage','ct.geod':'Kazakhstan and worldwide, remotely',
