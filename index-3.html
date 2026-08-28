@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPENVISUAL — сайты, которые работают на вас</title>
+<meta name="description" content="OPENVISUAL — студия веб-разработки и дизайна. Превращаем идею в сайт: лендинги, интернет-магазины, веб-приложения. Работаем по всему миру. Бесплатная консультация в WhatsApp.">
+<meta name="theme-color" content="#07070c">
+<meta property="og:title" content="OPENVISUAL — сайты, которые работают на вас">
+<meta property="og:description" content="Превращаем вашу идею в сайт. Бесплатная консультация.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%237c5cff' stroke-width='12'/></svg>">
+
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#07070c;
+  --bg-2:#0c0c16;
+  --surface:rgba(255,255,255,.035);
+  --stroke:rgba(255,255,255,.09);
+  --stroke-2:rgba(255,255,255,.16);
+  --text:#f2f1f7;
+  --muted:#9c9ab0;
+  --violet:#7c5cff;
+  --cyan:#22d3ee;
+  --pink:#ff4fd8;
+  --lime:#b6ff3d;
+  --amber:#ffb703;
+  --grad:linear-gradient(110deg,var(--violet),var(--cyan) 45%,var(--pink));
+  --radius:22px;
+  --shadow:0 30px 80px -30px rgba(124,92,255,.55);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(18px,5vw,80px);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:300;line-height:1.6;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.font-d{font-family:'Space Grotesk','Inter',sans-serif;font-weight:600;line-height:1.05;letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,input,textarea,select{font:inherit;color:inherit}
+::selection{background:var(--violet);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+
+/* ============ BACKGROUND FX ============ */
+.bg-fx{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.bg-grid{
+  position:absolute;inset:-50%;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 60% 55% at 50% 35%,#000 20%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 35%,#000 20%,transparent 75%);
+  animation:gridDrift 32s linear infinite;
+}
+@keyframes gridDrift{to{transform:translate3d(64px,64px,0)}}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.4;will-change:transform}
+.orb-1{width:46vw;height:46vw;background:var(--violet);top:-12vw;left:-8vw;animation:float1 22s ease-in-out infinite}
+.orb-2{width:38vw;height:38vw;background:var(--cyan);top:28vh;right:-12vw;animation:float2 26s ease-in-out infinite}
+.orb-3{width:34vw;height:34vw;background:var(--pink);bottom:-10vw;left:22vw;animation:float3 30s ease-in-out infinite}
+@keyframes float1{50%{transform:translate(8vw,10vh) scale(1.15)}}
+@keyframes float2{50%{transform:translate(-10vw,-8vh) scale(.88)}}
+@keyframes float3{50%{transform:translate(6vw,-12vh) scale(1.1)}}
+.noise{position:absolute;inset:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* cursor spotlight */
+.spot{position:fixed;width:520px;height:520px;left:0;top:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,rgba(124,92,255,.16),transparent 62%);
+  transform:translate3d(-50%,-50%,0);transition:opacity .4s;opacity:0}
+
+/* ============ PRELOADER ============ */
+#loader{position:fixed;inset:0;z-index:999;background:var(--bg);display:grid;place-items:center;
+  transition:opacity .7s var(--ease),visibility .7s}
+#loader.done{opacity:0;visibility:hidden}
+.load-mark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(22px,6vw,40px);letter-spacing:.3em;
+  background:var(--grad);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 1.6s linear infinite}
+@keyframes shimmer{to{background-position:300% 0}}
+.load-bar{width:min(240px,60vw);height:2px;background:var(--stroke);margin-top:22px;border-radius:2px;overflow:hidden}
+.load-bar i{display:block;height:100%;width:0;background:var(--grad);animation:fill 1.1s var(--ease) forwards}
+@keyframes fill{to{width:100%}}
+
+/* ============ SCROLL PROGRESS ============ */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:var(--grad);z-index:120;box-shadow:0 0 18px rgba(124,92,255,.9)}
+
+/* ============ LAYOUT ============ */
+.wrap{width:min(1240px,100% - var(--pad)*2);margin-inline:auto}
+section{padding:clamp(72px,11vw,150px) 0;position:relative}
+
+/* ============ HEADER ============ */
+header{position:fixed;top:0;left:0;right:0;z-index:100;transition:.45s var(--ease)}
+header.solid{background:rgba(7,7,12,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--stroke)}
+.nav{display:flex;align-items:center;gap:22px;height:76px}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:17px;letter-spacing:.16em;margin-right:auto}
+.logo-dot{width:26px;height:26px;border-radius:50%;background:var(--grad);box-shadow:0 0 22px var(--violet);
+  animation:pulseDot 3.4s ease-in-out infinite;flex:none}
+@keyframes pulseDot{50%{transform:scale(.78);filter:hue-rotate(70deg)}}
+.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.menu{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.menu a{position:relative;padding:9px 14px;font-size:14.5px;color:var(--muted);border-radius:99px;transition:.3s}
+.menu a::after{content:'';position:absolute;left:14px;right:14px;bottom:5px;height:1px;background:var(--grad);
+  transform:scaleX(0);transform-origin:0;transition:transform .35s var(--ease)}
+.menu a:hover{color:var(--text)}
+.menu a:hover::after{transform:scaleX(1)}
+.lang{display:flex;border:1px solid var(--stroke);border-radius:99px;overflow:hidden;flex:none}
+.lang button{background:none;border:0;padding:7px 12px;font-size:12.5px;font-weight:500;color:var(--muted);cursor:pointer;transition:.25s}
+.lang button.on{background:var(--grad);color:#fff}
+
+/* buttons */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 26px;border-radius:99px;border:0;cursor:pointer;font-weight:500;font-size:15px;
+  white-space:nowrap;overflow:hidden;transition:transform .3s var(--ease),box-shadow .3s}
+.btn-main{background:var(--grad);background-size:200% 100%;color:#fff;box-shadow:0 12px 40px -12px rgba(124,92,255,.9)}
+.btn-main::before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:translateX(-120%)}
+.btn-main:hover::before{animation:sweep .9s var(--ease)}
+@keyframes sweep{to{transform:translateX(120%)}}
+.btn-ghost{background:var(--surface);border:1px solid var(--stroke-2);color:var(--text);backdrop-filter:blur(10px)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 46px -14px rgba(124,92,255,.85)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-sm{padding:11px 20px;font-size:14px}
+.burger{display:none;width:44px;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--stroke);
+  cursor:pointer;flex:none;position:relative}
+.burger i{position:absolute;left:12px;width:20px;height:1.8px;background:var(--text);border-radius:2px;transition:.35s var(--ease)}
+.burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:21px}.burger i:nth-child(3){top:27px}
+.burger.x i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.x i:nth-child(2){opacity:0}
+.burger.x i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+@media(max-width:940px){
+  .menu,.nav>.btn{display:none}
+  .burger{display:block}
+  .menu.open{display:flex;position:absolute;top:76px;left:var(--pad);right:var(--pad);flex-direction:column;
+    background:rgba(12,12,22,.96);backdrop-filter:blur(20px);border:1px solid var(--stroke);border-radius:var(--radius);
+    padding:14px;gap:2px;animation:drop .4s var(--ease)}
+  .menu.open a{padding:14px;font-size:16px}
+}
+@keyframes drop{from{opacity:0;transform:translateY(-14px)}}
+
+/* ============ HERO ============ */
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:110px;padding-bottom:60px}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 10px;border-radius:99px;
+  background:var(--surface);border:1px solid var(--stroke-2);font-size:13px;color:var(--muted);backdrop-filter:blur(10px)}
+.live{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(182,255,61,.7);animation:live 2s infinite}
+@keyframes live{70%{box-shadow:0 0 0 9px rgba(182,255,61,0)}100%{box-shadow:0 0 0 0 rgba(182,255,61,0)}}
+h1{font-size:clamp(38px,8.4vw,104px);margin:24px 0 0;font-weight:700}
+.grad-txt{background:var(--grad);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:flow 7s ease-in-out infinite}
+@keyframes flow{50%{background-position:100% 0}}
+.hero-sub{max-width:56ch;margin-top:26px;font-size:clamp(15.5px,1.9vw,19px);color:var(--muted)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,64px);margin-top:64px;padding-top:34px;border-top:1px solid var(--stroke)}
+.stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4.4vw,46px);font-weight:700;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.28em;
+  color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-hint i{width:1px;height:44px;background:linear-gradient(var(--violet),transparent);animation:sd 1.9s ease-in-out infinite}
+@keyframes sd{0%,100%{opacity:.2;transform:scaleY(.4)}50%{opacity:1;transform:scaleY(1)}}
+@media(max-width:700px){.scroll-hint{display:none}}
+
+/* ============ MARQUEE ============ */
+.marquee{padding:0;border-block:1px solid var(--stroke);background:rgba(255,255,255,.02);overflow:hidden}
+.mq-track{display:flex;gap:52px;padding:20px 0;width:max-content;animation:mq 28s linear infinite}
+.marquee:hover .mq-track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.mq-track span{display:flex;align-items:center;gap:52px;font-family:'Space Grotesk',sans-serif;font-size:clamp(15px,2vw,22px);
+  font-weight:500;color:var(--muted);white-space:nowrap}
+.mq-track span::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--grad);flex:none}
+
+/* ============ SECTION HEAD ============ */
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan)}
+.eyebrow::before{content:'';width:26px;height:1px;background:var(--cyan)}
+h2{font-size:clamp(29px,5.3vw,62px);margin:18px 0 0}
+.sec-sub{max-width:62ch;margin-top:20px;color:var(--muted);font-size:clamp(15px,1.7vw,17.5px)}
+.head-row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between}
+
+/* ============ CARDS ============ */
+.grid{display:grid;gap:20px;margin-top:56px}
+.g-3{grid-template-columns:repeat(auto-fit,minmax(285px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{position:relative;padding:clamp(24px,3vw,36px);border-radius:var(--radius);border:1px solid var(--stroke);
+  background:var(--surface);backdrop-filter:blur(12px);overflow:hidden;transition:.45s var(--ease)}
+.card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .45s;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(124,92,255,.2),transparent 65%)}
+.card:hover{transform:translateY(-7px);border-color:var(--stroke-2);box-shadow:var(--shadow)}
+.card:hover::before{opacity:1}
+.ico{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;margin-bottom:22px;
+  background:var(--surface);border:1px solid var(--stroke-2);transition:.45s var(--ease)}
+.ico svg{width:24px;height:24px;stroke-width:1.6;fill:none;stroke:currentColor}
+.card:hover .ico{transform:rotate(-8deg) scale(1.08)}
+.card h3{font-size:clamp(19px,2.2vw,23px)}
+.card p{margin-top:12px;color:var(--muted);font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{padding:5px 11px;border-radius:99px;font-size:11.5px;border:1px solid var(--stroke);color:var(--muted);background:rgba(255,255,255,.03)}
+.c1{color:var(--violet)}.c2{color:var(--cyan)}.c3{color:var(--pink)}.c4{color:var(--lime)}.c5{color:var(--amber)}
+.c1 .ico,.ico.c1{box-shadow:inset 0 0 24px rgba(124,92,255,.25)}
+.card.v1{--gl:124,92,255}.card.v2{--gl:34,211,238}.card.v3{--gl:255,79,216}
+.card.v4{--gl:182,255,61}.card.v5{--gl:255,183,3}.card.v6{--gl:124,92,255}
+.card::before{background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(var(--gl,124,92,255),.2),transparent 65%)}
+
+/* ============ PROCESS ============ */
+.steps{counter-reset:s;display:grid;gap:16px;margin-top:56px}
+.step{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,34px);align-items:start;
+  padding:clamp(22px,3vw,30px);border-radius:var(--radius);border:1px solid var(--stroke);background:var(--surface);transition:.4s var(--ease)}
+.step:hover{border-color:var(--stroke-2);transform:translateX(8px);background:rgba(255,255,255,.055)}
+.step::before{content:'0' counter(s);font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,42px);font-weight:700;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.step p{color:var(--muted);margin-top:9px;font-size:15px}
+
+/* ============ WORK ============ */
+.work{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--stroke);
+  min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(22px,3vw,34px);
+  transition:.5s var(--ease)}
+.work::after{content:'';position:absolute;inset:0;z-index:0;transition:transform .8s var(--ease),filter .5s}
+.work.w1::after{background:linear-gradient(135deg,#7c5cff,#22d3ee)}
+.work.w2::after{background:linear-gradient(135deg,#ff4fd8,#ffb703)}
+.work.w3::after{background:linear-gradient(135deg,#22d3ee,#b6ff3d)}
+.work.w4::after{background:linear-gradient(135deg,#ffb703,#7c5cff)}
+.work>*{position:relative;z-index:2}
+.work::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(5,5,10,.94) 8%,rgba(5,5,10,.25) 70%)}
+.work:hover{transform:translateY(-7px);box-shadow:var(--shadow)}
+.work:hover::after{transform:scale(1.12) rotate(3deg);filter:saturate(1.3)}
+.work h3{font-size:clamp(20px,2.4vw,26px)}
+.work p{color:#c9c7d8;font-size:14.5px;margin-top:8px}
+.work .tag{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.3);color:#fff}
+
+/* ============ FAQ ============ */
+.faq{margin-top:48px;border-top:1px solid var(--stroke)}
+.q{border-bottom:1px solid var(--stroke)}
+.q button{width:100%;background:none;border:0;text-align:left;padding:24px 46px 24px 0;cursor:pointer;
+  position:relative;font-family:'Space Grotesk',sans-serif;font-size:clamp(16px,2vw,20px);font-weight:500;transition:.3s}
+.q button:hover{color:var(--cyan);padding-left:8px}
+.q button::after{content:'';position:absolute;right:8px;top:50%;width:13px;height:13px;margin-top:-6px;
+  border-right:2px solid var(--violet);border-bottom:2px solid var(--violet);
+  transform:translateY(-25%) rotate(45deg);transition:transform .4s var(--ease)}
+.q.open button::after{transform:translateY(20%) rotate(-135deg)}
+.q .a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.q .a p{padding:0 40px 26px 0;color:var(--muted);font-size:15.5px}
+
+/* ============ CONTACT ============ */
+.contact-box{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,54px);margin-top:56px;
+  padding:clamp(24px,4vw,52px);border-radius:clamp(24px,3vw,34px);
+  border:1px solid var(--stroke);background:linear-gradient(160deg,rgba(124,92,255,.13),rgba(34,211,238,.06) 55%,transparent);
+  backdrop-filter:blur(14px)}
+@media(max-width:900px){.contact-box{grid-template-columns:1fr}}
+.contact-list{display:grid;gap:14px;margin-top:30px;list-style:none;padding:0}
+.contact-list li{display:flex;gap:13px;align-items:flex-start;font-size:15px;color:var(--muted)}
+.contact-list svg{width:19px;height:19px;flex:none;margin-top:3px;stroke:var(--cyan);fill:none;stroke-width:1.7}
+.contact-list b{color:var(--text);font-weight:500}
+form{display:grid;gap:14px}
+.field{position:relative}
+.field label{position:absolute;left:16px;top:15px;font-size:15px;color:var(--muted);pointer-events:none;
+  transition:.28s var(--ease);transform-origin:0 0}
+input,textarea,select{width:100%;padding:24px 16px 11px;border-radius:14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--stroke);transition:.3s;font-size:15px}
+select{padding:17px 16px;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%239c9ab0' stroke-width='1.8'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;cursor:pointer}
+select option{background:#101020;color:var(--text)}
+textarea{min-height:118px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--violet);background:rgba(124,92,255,.08);
+  box-shadow:0 0 0 4px rgba(124,92,255,.13);outline:none}
+input:focus+label,textarea:focus+label,
+input:not(:placeholder-shown)+label,textarea:not(:placeholder-shown)+label{transform:translateY(-9px) scale(.76);color:var(--cyan)}
+.hint{font-size:12.5px;color:var(--muted);text-align:center}
+.err{border-color:var(--pink)!important;box-shadow:0 0 0 4px rgba(255,79,216,.14)!important;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.sent{padding:13px;border-radius:12px;background:rgba(182,255,61,.1);border:1px solid rgba(182,255,61,.35);
+  color:var(--lime);font-size:14px;text-align:center;display:none}
+.sent.show{display:block;animation:drop .45s var(--ease)}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(255,255,255,.015)}
+.f-top{display:flex;flex-wrap:wrap;gap:34px;justify-content:space-between;align-items:flex-start}
+.f-links{display:flex;flex-wrap:wrap;gap:26px;list-style:none;margin:0;padding:0;font-size:14.5px;color:var(--muted)}
+.f-links a:hover{color:var(--cyan)}
+.f-bot{margin-top:40px;padding-top:22px;border-top:1px solid var(--stroke);display:flex;flex-wrap:wrap;
+  gap:14px;justify-content:space-between;font-size:13px;color:var(--muted)}
+
+/* ============ FLOATING WA ============ */
+.wa-float{position:fixed;right:clamp(14px,3vw,28px);bottom:clamp(14px,3vw,28px);z-index:90;
+  width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,#25d366,#0f9d58);box-shadow:0 14px 36px -8px rgba(37,211,102,.75);
+  transition:transform .35s var(--ease)}
+.wa-float:hover{transform:scale(1.1) rotate(6deg)}
+.wa-float svg{width:29px;height:29px;fill:#fff}
+.wa-float::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,211,102,.6);
+  animation:ring 2.4s ease-out infinite}
+@keyframes ring{to{transform:scale(1.75);opacity:0}}
+
+/* ============ REVEAL ============ */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv-d1{transition-delay:.09s}.rv-d2{transition-delay:.18s}.rv-d3{transition-delay:.27s}
+.rv-d4{transition-delay:.36s}.rv-d5{transition-delay:.45s}.rv-d6{transition-delay:.54s}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .rv{opacity:1;transform:none}
+  .spot{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="loader"><div style="text-align:center">
+  <div class="load-mark">OPENVISUAL</div>
+  <div class="load-bar"><i></i></div>
+</div></div>
+
+<!-- BACKGROUND -->
+<div class="bg-fx" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <div class="noise"></div>
+</div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="wrap nav">
+    <a href="#top" class="logo" aria-label="OPENVISUAL">
+      <span class="logo-dot"></span><span>OPENVISUAL</span>
+    </a>
+    <ul class="menu" id="menu">
+      <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
+      <li><a href="#work" data-i18n="nav.work">Работы</a></li>
+      <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
+      <li><a href="#about" data-i18n="nav.about">О нас</a></li>
+      <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Контакты</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ru" class="on">RU</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="btn btn-main btn-sm" href="#contact" data-i18n="nav.cta">Обсудить проект</a>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="pill rv"><span class="live"></span>
+      <span data-i18n="hero.pill">Работаем по всему миру · Отвечаем в течение 15 минут</span>
+    </div>
+    <h1 class="rv rv-d1">
+      <span data-i18n="hero.h1a">Превращаем вашу идею</span><br>
+      <span class="grad-txt" data-i18n="hero.h1b">в сайт, который продаёт</span>
+    </h1>
+    <p class="hero-sub rv rv-d2" data-i18n="hero.sub">
+      OPENVISUAL — студия дизайна и веб-разработки. Расскажите идею в двух словах,
+      а мы бесплатно разберём её, посчитаем срок и покажем, каким будет ваш сайт.
+    </p>
+    <div class="hero-cta rv rv-d3">
+      <a class="btn btn-main" href="#contact" data-i18n="hero.cta1">Получить консультацию</a>
+      <a class="btn btn-ghost" href="#work" data-i18n="hero.cta2">Смотреть работы</a>
+    </div>
+    <div class="hero-stats rv rv-d4">
+      <div class="stat"><b data-count="120" data-suffix="+">0</b><span data-i18n="hero.s1">проектов запущено</span></div>
+      <div class="stat"><b data-count="14" data-suffix="">0</b><span data-i18n="hero.s2">стран клиентов</span></div>
+      <div class="stat"><b data-count="7" data-suffix=" дн.">0</b><span data-i18n="hero.s3">средний срок лендинга</span></div>
+      <div class="stat"><b data-count="98" data-suffix="%">0</b><span data-i18n="hero.s4">возвращаются снова</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span data-i18n="hero.scroll">SCROLL</span><i></i></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq-track">
+    <span>Landing Page</span><span>E-commerce</span><span>Web App</span><span>UI/UX Design</span>
+    <span>Branding</span><span>SEO</span><span>Motion</span><span>Support 24/7</span>
+    <span>Landing Page</span><span>E-commerce</span><span>Web App</span><span>UI/UX Design</span>
+    <span>Branding</span><span>SEO</span><span>Motion</span><span>Support 24/7</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="head-row">
+      <div>
+        <span class="eyebrow rv" data-i18n="srv.eyebrow">Услуги</span>
+        <h2 class="rv rv-d1"><span data-i18n="srv.h2a">Что мы</span> <span class="grad-txt" data-i18n="srv.h2b">делаем</span></h2>
+        <p class="sec-sub rv rv-d2" data-i18n="srv.sub">
+          Полный цикл: от первого разговора об идее до запуска и поддержки. Без подрядчиков-посредников.
+        </p>
+      </div>
+      <a class="btn btn-ghost rv rv-d3" href="#contact" data-i18n="srv.cta">Рассчитать стоимость</a>
+    </div>
+
+    <div class="grid g-3">
+      <article class="card v1 rv">
+        <div class="ico c1"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 9h18M7 13h6"/></svg></div>
+        <h3 data-i18n="s1.t">Лендинги</h3>
+        <p data-i18n="s1.d">Одностраничники под запуск продукта или рекламу. Сильная структура, быстрая загрузка, заявки идут прямо в WhatsApp.</p>
+        <div class="tags"><span class="tag">Figma</span><span class="tag">Анимации</span><span class="tag">3–7 дней</span></div>
+      </article>
+
+      <article class="card v2 rv rv-d1">
+        <div class="ico c2"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/><path d="M3 3h2l1 3"/></svg></div>
+        <h3 data-i18n="s2.t">Интернет-магазины</h3>
+        <p data-i18n="s2.d">Каталог, корзина, оплата картой и Kaspi, доставка, админка. Вы управляете товарами сами, без программиста.</p>
+        <div class="tags"><span class="tag">Оплата online</span><span class="tag">CRM</span><span class="tag">Админка</span></div>
+      </article>
+
+      <article class="card v3 rv rv-d2">
+        <div class="ico c3"><svg viewBox="0 0 24 24"><path d="M4 17V7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M8 12h4M8 15h8"/><circle cx="8" cy="9" r="1"/></svg></div>
+        <h3 data-i18n="s3.t">Веб-приложения</h3>
+        <p data-i18n="s3.d">Личные кабинеты, дашборды, панели записи и брони. Логика под ваш бизнес-процесс, а не шаблон.</p>
+        <div class="tags"><span class="tag">API</span><span class="tag">Auth</span><span class="tag">Dashboard</span></div>
+      </article>
+
+      <article class="card v4 rv rv-d1">
+        <div class="ico c4"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 010 18M3 12h18"/></svg></div>
+        <h3 data-i18n="s4.t">UI/UX дизайн</h3>
+        <p data-i18n="s4.d">Прототип и дизайн в Figma до строчки кода. Вы видите и утверждаете каждый экран заранее.</p>
+        <div class="tags"><span class="tag">Прототип</span><span class="tag">Дизайн-система</span></div>
+      </article>
+
+      <article class="card v5 rv rv-d2">
+        <div class="ico c5"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1 5.6-4.9-2.8-4.9 2.8 1-5.6L4 8.9l5.6-.7z"/></svg></div>
+        <h3 data-i18n="s5.t">Брендинг</h3>
+        <p data-i18n="s5.d">Логотип, цвета, шрифты и упаковка соцсетей. Чтобы сайт и Instagram выглядели как одна компания.</p>
+        <div class="tags"><span class="tag">Логотип</span><span class="tag">Гайдлайн</span></div>
+      </article>
+
+      <article class="card v6 rv rv-d3">
+        <div class="ico c1"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-9-9"/><path d="M12 8v4l3 2"/><path d="M17 3h4v4"/></svg></div>
+        <h3 data-i18n="s6.t">SEO и поддержка</h3>
+        <p data-i18n="s6.d">Выводим в поиск, следим за скоростью, обновляем контент. Сайт живёт и после сдачи проекта.</p>
+        <div class="tags"><span class="tag">Core Web Vitals</span><span class="tag">Analytics</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="wrap">
+    <span class="eyebrow rv" data-i18n="work.eyebrow">Портфолио</span>
+    <h2 class="rv rv-d1"><span data-i18n="work.h2a">Проекты, которыми</span> <span class="grad-txt" data-i18n="work.h2b">гордимся</span></h2>
+    <p class="sec-sub rv rv-d2" data-i18n="work.sub">Разные сферы и страны — принцип один: понятно, быстро, красиво.</p>
+
+    <div class="grid g-2">
+      <a class="work w1 rv" href="#contact">
+        <div class="tags"><span class="tag">E-commerce</span><span class="tag" data-i18n="work.1c">Казахстан</span></div>
+        <h3 data-i18n="work.1t">AURA Store</h3>
+        <p data-i18n="work.1d">Магазин косметики с Kaspi-оплатой. Конверсия выросла в 2,4 раза за первый месяц.</p>
+      </a>
+      <a class="work w2 rv rv-d1" href="#contact">
+        <div class="tags"><span class="tag">Landing</span><span class="tag" data-i18n="work.2c">ОАЭ</span></div>
+        <h3 data-i18n="work.2t">Nova Fit Dubai</h3>
+        <p data-i18n="work.2d">Лендинг фитнес-клуба с онлайн-записью. 340 заявок за первые две недели рекламы.</p>
+      </a>
+      <a class="work w3 rv rv-d2" href="#contact">
+        <div class="tags"><span class="tag">Web App</span><span class="tag" data-i18n="work.3c">Германия</span></div>
+        <h3 data-i18n="work.3t">Logi.Track</h3>
+        <p data-i18n="work.3d">Панель для логистики: заказы, водители, статусы в реальном времени.</p>
+      </a>
+      <a class="work w4 rv rv-d3" href="#contact">
+        <div class="tags"><span class="tag">Branding</span><span class="tag" data-i18n="work.4c">Казахстан</span></div>
+        <h3 data-i18n="work.4t">Qant Coffee</h3>
+        <p data-i18n="work.4d">Фирменный стиль и сайт сети кофеен: меню, локации, доставка.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <span class="eyebrow rv" data-i18n="proc.eyebrow">Как мы работаем</span>
+    <h2 class="rv rv-d1"><span data-i18n="proc.h2a">От идеи до</span> <span class="grad-txt" data-i18n="proc.h2b">запуска</span></h2>
+    <p class="sec-sub rv rv-d2" data-i18n="proc.sub">Прозрачные этапы. Вы всегда знаете, что происходит и когда будет готово.</p>
+
+    <div class="steps">
+      <div class="step rv"><div>
+        <h3 data-i18n="p1.t">Знакомство и консультация</h3>
+        <p data-i18n="p1.d">Пишете нам в WhatsApp или оставляете заявку. Задаём вопросы об идее, аудитории и целях. Бесплатно и без обязательств.</p>
+      </div></div>
+      <div class="step rv rv-d1"><div>
+        <h3 data-i18n="p2.t">Смета и структура</h3>
+        <p data-i18n="p2.d">Присылаем список страниц, срок и фиксированную цену. Никаких «плюс-минус» в процессе.</p>
+      </div></div>
+      <div class="step rv rv-d2"><div>
+        <h3 data-i18n="p3.t">Дизайн в Figma</h3>
+        <p data-i18n="p3.d">Показываем макеты и правим до вашего «да». Только после утверждения переходим к коду.</p>
+      </div></div>
+      <div class="step rv rv-d3"><div>
+        <h3 data-i18n="p4.t">Разработка и тесты</h3>
+        <p data-i18n="p4.d">Верстаем адаптивно, проверяем на телефонах и планшетах, ускоряем загрузку, подключаем формы и аналитику.</p>
+      </div></div>
+      <div class="step rv rv-d4"><div>
+        <h3 data-i18n="p5.t">Запуск и поддержка</h3>
+        <p data-i18n="p5.d">Домен, хостинг, передача доступов, короткое обучение. Дальше 30 дней правок бесплатно.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="head-row">
+      <div>
+        <span class="eyebrow rv" data-i18n="ab.eyebrow">О нас</span>
+        <h2 class="rv rv-d1"><span data-i18n="ab.h2a">Небольшая команда,</span><br><span class="grad-txt" data-i18n="ab.h2b">большая ответственность</span></h2>
+        <p class="sec-sub rv rv-d2" data-i18n="ab.sub">
+          OPENVISUAL начинался как два дизайнера с ноутбуками. Сейчас это команда дизайна, разработки и продвижения,
+          которая работает с клиентами из Казахстана, Европы, США и Ближнего Востока. Ведём проекты на русском,
+          казахском и английском — часовой пояс не проблема.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid g-3">
+      <article class="card v2 rv"><div class="ico c2"><svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 4.4-3 8-7 9-4-1-7-4.6-7-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="ab1.t">Фиксированная цена</h3><p data-i18n="ab1.d">Договорились о сумме — она не растёт по ходу проекта. Все правки в рамках согласованного объёма включены.</p></article>
+      <article class="card v4 rv rv-d1"><div class="ico c4"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div>
+        <h3 data-i18n="ab2.t">Сроки, а не обещания</h3><p data-i18n="ab2.d">Лендинг — от 3 дней, магазин — от 2 недель. Дата сдачи прописана до старта работ.</p></article>
+      <article class="card v3 rv rv-d2"><div class="ico c3"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1116 0v5a2 2 0 01-2 2h-3v-6h5"/><path d="M4 13h5v6H6a2 2 0 01-2-2z"/></svg></div>
+        <h3 data-i18n="ab3.t">Живая связь</h3><p data-i18n="ab3.d">Один менеджер на весь проект, ответ в WhatsApp в течение 15 минут в рабочее время.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <span class="eyebrow rv" data-i18n="faq.eyebrow">FAQ</span>
+    <h2 class="rv rv-d1"><span data-i18n="faq.h2a">Частые</span> <span class="grad-txt" data-i18n="faq.h2b">вопросы</span></h2>
+
+    <div class="faq rv rv-d2">
+      <div class="q"><button type="button"><span data-i18n="q1">Сколько стоит сайт?</span></button>
+        <div class="a"><p data-i18n="a1">Лендинг — от 150 000 ₸, корпоративный сайт — от 350 000 ₸, интернет-магазин — от 600 000 ₸. Точная сумма зависит от объёма: назовите задачу в WhatsApp, и мы посчитаем в тот же день.</p></div></div>
+      <div class="q"><button type="button"><span data-i18n="q2">У меня только идея, без текстов и фото. Возьмётесь?</span></button>
+        <div class="a"><p data-i18n="a2">Да, это обычная ситуация. Помогаем с текстами, подбираем изображения и иконки, при необходимости организуем съёмку. Ваша задача — рассказать про бизнес, остальное сделаем мы.</p></div></div>
+      <div class="q"><button type="button"><span data-i18n="q3">Работаете с клиентами из других стран?</span></button>
+        <div class="a"><p data-i18n="a3">Да, принимаем заказы по всему миру. Общаемся в WhatsApp, Zoom или Google Meet, документы подписываем электронно, оплату принимаем международным переводом или картой.</p></div></div>
+      <div class="q"><button type="button"><span data-i18n="q4">Смогу ли я сам менять контент на сайте?</span></button>
+        <div class="a"><p data-i18n="a4">Да. Подключаем удобную админку и записываем короткое видео-обучение под ваш проект. Менять тексты, цены и фото сможете без нас.</p></div></div>
+      <div class="q"><button type="button"><span data-i18n="q5">Что будет после сдачи проекта?</span></button>
+        <div class="a"><p data-i18n="a5">30 дней бесплатных правок и техподдержки. Дальше по желанию — месячное обслуживание: обновления, бэкапы, скорость, SEO.</p></div></div>
+      <div class="q"><button type="button"><span data-i18n="q6">Как проходит оплата?</span></button>
+        <div class="a"><p data-i18n="a6">Обычно 50% на старте и 50% после сдачи. Для крупных проектов делим на этапы. Работаем по договору, предоставляем закрывающие документы.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <span class="eyebrow rv" data-i18n="ct.eyebrow">Консультация</span>
+    <h2 class="rv rv-d1"><span data-i18n="ct.h2a">Расскажите идею —</span><br><span class="grad-txt" data-i18n="ct.h2b">мы разберём её бесплатно</span></h2>
+
+    <div class="contact-box rv rv-d2">
+      <div>
+        <h3 style="font-size:clamp(19px,2.3vw,24px)" data-i18n="ct.left">Ответим быстрее, чем вы допьёте кофе</h3>
+        <p style="color:var(--muted);margin-top:14px;font-size:15px" data-i18n="ct.leftd">
+          Заполните форму — заявка мгновенно уйдёт нам в WhatsApp. Или напишите напрямую, если удобнее.
+        </p>
+        <ul class="contact-list">
+          <li><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg>
+            <span><b>WhatsApp / <span data-i18n="ct.phone">Телефон</span></b><br><a href="https://wa.me/77078726414" target="_blank" rel="noopener">+7 707 872 6414</a></span></li>
+          <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 010 18M3 12h18"/></svg>
+            <span><b data-i18n="ct.geo">География</b><br><span data-i18n="ct.geod">Казахстан и весь мир, удалённо</span></span></li>
+          <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+            <span><b data-i18n="ct.time">Время работы</b><br><span data-i18n="ct.timed">Пн–Сб, 10:00–20:00 (GMT+5) · заявки принимаем круглосуточно</span></span></li>
+        </ul>
+        <a class="btn btn-main" style="margin-top:26px" href="https://wa.me/77078726414?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20OPENVISUAL!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8E%20%D0%BF%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D1%83." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-2.3-.2-4.6-2.2-2.3-2-2.8-3.7-2.9-4.2 0-.5.5-1.6 1-1.9.2-.1.4-.1.6 0l.9 1.7c.1.2 0 .4-.1.5l-.5.6c-.1.2-.2.3 0 .6.3.6 1 1.5 1.7 2 .5.4 1 .6 1.3.4l.7-.6c.2-.1.4-.1.5 0l1.6 1c.2.1.2.4.1.6z"/></svg>
+          <span data-i18n="ct.wa">Написать в WhatsApp</span>
+        </a>
+      </div>
+
+      <form id="form" novalidate>
+        <div class="field">
+          <input type="text" id="fname" name="name" placeholder=" " autocomplete="name" required>
+          <label for="fname" data-i18n="f.name">Ваше имя</label>
+        </div>
+        <div class="field">
+          <input type="text" id="fcontact" name="contact" placeholder=" " autocomplete="tel" required>
+          <label for="fcontact" data-i18n="f.contact">Телефон, WhatsApp или e-mail</label>
+        </div>
+        <div class="field">
+          <select id="ftype" name="type" aria-label="Тип проекта">
+            <option data-i18n="f.t0">Что нужно сделать?</option>
+            <option data-i18n="f.t1">Лендинг</option>
+            <option data-i18n="f.t2">Корпоративный сайт</option>
+            <option data-i18n="f.t3">Интернет-магазин</option>
+            <option data-i18n="f.t4">Веб-приложение / кабинет</option>
+            <option data-i18n="f.t5">Дизайн и брендинг</option>
+            <option data-i18n="f.t6">Пока не знаю, нужна консультация</option>
+          </select>
+        </div>
+        <div class="field">
+          <select id="fbudget" name="budget" aria-label="Бюджет">
+            <option data-i18n="f.b0">Ориентировочный бюджет</option>
+            <option data-i18n="f.b1">до 150 000 ₸</option>
+            <option data-i18n="f.b2">150 000 – 400 000 ₸</option>
+            <option data-i18n="f.b3">400 000 – 1 000 000 ₸</option>
+            <option data-i18n="f.b4">более 1 000 000 ₸</option>
+            <option data-i18n="f.b5">нужен ваш совет</option>
+          </select>
+        </div>
+        <div class="field">
+          <textarea id="fidea" name="idea" placeholder=" " required></textarea>
+          <label for="fidea" data-i18n="f.idea">Опишите идею в двух-трёх предложениях</label>
+        </div>
+        <button type="submit" class="btn btn-main" data-i18n="f.submit">Отправить заявку в WhatsApp</button>
+        <div class="sent" id="sent" role="status" data-i18n="f.sent">Готово! Открываем WhatsApp с вашей заявкой — просто нажмите «Отправить».</div>
+        <p class="hint" data-i18n="f.hint">Нажимая кнопку, вы соглашаетесь на обработку данных для ответа на заявку.</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div style="max-width:34ch">
+        <a href="#top" class="logo" style="margin:0"><span class="logo-dot"></span><span>OPENVISUAL</span></a>
+        <p style="color:var(--muted);margin-top:16px;font-size:14.5px" data-i18n="ft.about">
+          Студия дизайна и веб-разработки. Делаем сайты, которые приятно смотреть и удобно использовать.
+        </p>
+      </div>
+      <ul class="f-links">
+        <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
+        <li><a href="#work" data-i18n="nav.work">Работы</a></li>
+        <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
+        <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+      </ul>
+      <div>
+        <b style="font-size:14px;letter-spacing:.05em" data-i18n="ft.contact">Связаться</b>
+        <p style="margin-top:12px"><a href="https://wa.me/77078726414" target="_blank" rel="noopener" style="color:var(--cyan)">+7 707 872 6414</a></p>
+        <p style="color:var(--muted);font-size:14px;margin-top:6px" data-i18n="ft.geo">Казахстан · заказы по всему миру</p>
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>© <span id="year">2025</span> OPENVISUAL. <span data-i18n="ft.rights">Все права защищены.</span></span>
+      <span data-i18n="ft.made">Сделано с любовью к деталям</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/77078726414" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-2.3-.2-4.6-2.2-2.3-2-2.8-3.7-2.9-4.2 0-.5.5-1.6 1-1.9.2-.1.4-.1.6 0l.9 1.7c.1.2 0 .4-.1.5l-.5.6c-.1.2-.2.3 0 .6.3.6 1 1.5 1.7 2 .5.4 1 .6 1.3.4l.7-.6c.2-.1.4-.1.5 0l1.6 1c.2.1.2.4.1.6z"/></svg>
+</a>
+
+<script>
+(function(){
+  'use strict';
+  const WA = '77078726414';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- preloader ---------- */
+  addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('done'), 550));
+
+  /* ---------- year ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- header + progress ---------- */
+  const header = document.getElementById('header'), bar = document.getElementById('progress');
+  const onScroll = () => {
+    header.classList.toggle('solid', scrollY > 40);
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')';
+  };
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* ---------- mobile menu ---------- */
+  const burger = document.getElementById('burger'), menu = document.getElementById('menu');
+  burger.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    burger.classList.toggle('x', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  menu.addEventListener('click', e => {
+    if (e.target.closest('a')) { menu.classList.remove('open'); burger.classList.remove('x'); burger.setAttribute('aria-expanded','false'); }
+  });
+
+  /* ---------- reveal on scroll ---------- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+  /* ---------- counters ---------- */
+  const cio = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target, target = +el.dataset.count, suffix = el.dataset.suffix || '';
+      if (reduce) { el.textContent = target + suffix; cio.unobserve(el); return; }
+      const t0 = performance.now(), dur = 1500;
+      const tick = (now) => {
+        const p = Math.min((now - t0) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    });
+  }, {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  /* ---------- card spotlight ---------- */
+  if (!reduce && matchMedia('(hover:hover)').matches) {
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+    const spot = document.getElementById('spot');
+    let sx = 0, sy = 0, tx = 0, ty = 0;
+    addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; spot.style.opacity = 1; });
+    (function loop(){ sx += (tx - sx) * .12; sy += (ty - sy) * .12;
+      spot.style.transform = 'translate3d(' + (sx - 260) + 'px,' + (sy - 260) + 'px,0)';
+      requestAnimationFrame(loop); })();
+  }
+
+  /* ---------- FAQ ---------- */
+  document.querySelectorAll('.q').forEach(q => {
+    const btn = q.querySelector('button'), a = q.querySelector('.a');
+    btn.setAttribute('aria-expanded','false');
+    btn.addEventListener('click', () => {
+      const open = q.classList.contains('open');
+      document.querySelectorAll('.q.open').forEach(o => {
+        o.classList.remove('open'); o.querySelector('.a').style.maxHeight = null;
+        o.querySelector('button').setAttribute('aria-expanded','false');
+      });
+      if (!open) { q.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; btn.setAttribute('aria-expanded','true'); }
+    });
+  });
+
+  /* ---------- form -> WhatsApp ---------- */
+  const form = document.getElementById('form'), sent = document.getElementById('sent');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const required = ['fname','fcontact','fidea'];
+    let ok = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      const bad = !el.value.trim();
+      el.classList.toggle('err', bad);
+      if (bad && ok) { el.focus(); ok = false; }
+    });
+    if (!ok) return;
+
+    const v = id => document.getElementById(id).value.trim();
+    const sel = id => { const s = document.getElementById(id); return s.selectedIndex > 0 ? s.value : '—'; };
+    const L = document.documentElement.lang === 'en';
+
+    const lines = L ? [
+      'New request from openvisual site',
+      'Name: ' + v('fname'),
+      'Contact: ' + v('fcontact'),
+      'Project: ' + sel('ftype'),
+      'Budget: ' + sel('fbudget'),
+      'Idea: ' + v('fidea')
+    ] : [
+      'Новая заявка с сайта OPENVISUAL',
+      'Имя: ' + v('fname'),
+      'Связь: ' + v('fcontact'),
+      'Проект: ' + sel('ftype'),
+      'Бюджет: ' + sel('fbudget'),
+      'Идея: ' + v('fidea')
+    ];
+
+    sent.classList.add('show');
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    form.reset();
+    setTimeout(() => sent.classList.remove('show'), 9000);
+  });
+  form.addEventListener('input', e => e.target.classList.remove('err'));
+
+  /* ---------- i18n (RU default, EN dictionary) ---------- */
+  const EN = {
+    'nav.services':'Services','nav.work':'Work','nav.process':'Process','nav.about':'About','nav.faq':'FAQ',
+    'nav.contact':'Contact','nav.cta':'Start a project',
+    'hero.pill':'Working worldwide · We reply within 15 minutes',
+    'hero.h1a':'We turn your idea','hero.h1b':'into a website that sells',
+    'hero.sub':'OPENVISUAL is a design and web development studio. Tell us your idea in a few words and we will break it down, estimate the timeline and show you what your website will look like — free of charge.',
+    'hero.cta1':'Get a free consultation','hero.cta2':'View our work',
+    'hero.s1':'projects launched','hero.s2':'client countries','hero.s3':'average landing time','hero.s4':'come back again',
+    'hero.scroll':'SCROLL',
+    'srv.eyebrow':'Services','srv.h2a':'What we','srv.h2b':'do',
+    'srv.sub':'Full cycle: from the first conversation about your idea to launch and support. No middlemen.',
+    'srv.cta':'Get a quote',
+    's1.t':'Landing pages','s1.d':'One-pagers for product launches and ad campaigns. Strong structure, fast loading, leads delivered straight to WhatsApp.',
+    's2.t':'Online stores','s2.d':'Catalogue, cart, card and Kaspi payments, delivery, admin panel. You manage products yourself, no developer needed.',
+    's3.t':'Web applications','s3.d':'Client portals, dashboards, booking systems. Logic built around your process, not a template.',
+    's4.t':'UI/UX design','s4.d':'Prototype and design in Figma before a single line of code. You see and approve every screen upfront.',
+    's5.t':'Branding','s5.d':'Logo, colours, fonts and social media kit — so your site and Instagram look like one company.',
+    's6.t':'SEO & support','s6.d':'We get you into search, monitor speed and refresh content. Your site keeps living after handover.',
+    'work.eyebrow':'Portfolio','work.h2a':'Projects we are','work.h2b':'proud of',
+    'work.sub':'Different industries and countries — one principle: clear, fast, beautiful.',
+    'work.1t':'AURA Store','work.1d':'Cosmetics store with Kaspi payments. Conversion grew 2.4× in the first month.','work.1c':'Kazakhstan',
+    'work.2t':'Nova Fit Dubai','work.2d':'Fitness club landing with online booking. 340 leads in the first two weeks of ads.','work.2c':'UAE',
+    'work.3t':'Logi.Track','work.3d':'Logistics dashboard: orders, drivers and statuses in real time.','work.3c':'Germany',
+    'work.4t':'Qant Coffee','work.4d':'Brand identity and website for a coffee chain: menu, locations, delivery.','work.4c':'Kazakhstan',
+    'proc.eyebrow':'How we work','proc.h2a':'From idea to','proc.h2b':'launch',
+    'proc.sub':'Clear stages. You always know what is happening and when it will be ready.',
+    'p1.t':'Intro & consultation','p1.d':'Message us on WhatsApp or submit the form. We ask about your idea, audience and goals. Free, no strings attached.',
+    'p2.t':'Estimate & structure','p2.d':'We send the page list, timeline and a fixed price. No moving numbers mid-project.',
+    'p3.t':'Design in Figma','p3.d':'We show mockups and iterate until you say yes. Coding starts only after approval.',
+    'p4.t':'Development & testing','p4.d':'Responsive build, tested on phones and tablets, optimised for speed, forms and analytics connected.',
+    'p5.t':'Launch & support','p5.d':'Domain, hosting, handover of all access, short training. Then 30 days of free edits.',
+    'ab.eyebrow':'About','ab.h2a':'A small team,','ab.h2b':'a big sense of ownership',
+    'ab.sub':'OPENVISUAL started as two designers with laptops. Today we are a design, development and marketing team working with clients in Kazakhstan, Europe, the US and the Middle East. We run projects in Russian, Kazakh and English — time zones are not an issue.',
+    'ab1.t':'Fixed price','ab1.d':'Once we agree on the sum, it does not grow. All edits within the agreed scope are included.',
+    'ab2.t':'Deadlines, not promises','ab2.d':'Landing from 3 days, online store from 2 weeks. The delivery date is set before we start.',
+    'ab3.t':'Real communication','ab3.d':'One manager for the whole project, replies on WhatsApp within 15 minutes during business hours.',
+    'faq.eyebrow':'FAQ','faq.h2a':'Frequently asked','faq.h2b':'questions',
+    'q1':'How much does a website cost?',
+    'a1':'Landing page from $300, corporate site from $700, online store from $1,200. The exact figure depends on scope — tell us the task on WhatsApp and we will quote the same day.',
+    'q2':'I only have an idea, no text or photos. Will you take it on?',
+    'a2':'Yes, that is the usual situation. We help with copy, pick images and icons, and arrange a photo shoot if needed. Your job is to tell us about the business, we handle the rest.',
+    'q3':'Do you work with clients abroad?',
+    'a3':'Yes, we accept orders worldwide. We communicate on WhatsApp, Zoom or Google Meet, sign documents electronically and accept international transfers or card payments.',
+    'q4':'Will I be able to edit the content myself?',
+    'a4':'Yes. We connect a convenient admin panel and record a short training video for your project. You can change text, prices and photos without us.',
+    'q5':'What happens after handover?',
+    'a5':'30 days of free edits and technical support. After that, optional monthly maintenance: updates, backups, speed, SEO.',
+    'q6':'How does payment work?',
+    'a6':'Usually 50% upfront and 50% on delivery. Large projects are split into milestones. We work under contract and provide invoices.',
+    'ct.eyebrow':'Consultation','ct.h2a':'Tell us your idea —','ct.h2b':'we will review it for free',
+    'ct.left':'We reply before your coffee gets cold',
+    'ct.leftd':'Fill in the form and your request goes straight to our WhatsApp. Or message us directly if that is easier.',
+    'ct.phone':'Phone','ct.geo':'Coverage','ct.geod':'Kazakhstan and worldwide, remotely',
+    'ct.time':'Working hours','ct.timed':'Mon–Sat, 10:00–20:00 (GMT+5) · requests accepted 24/7',
+    'ct.wa':'Message us on WhatsApp',
+    'f.name':'Your name','f.contact':'Phone, WhatsApp or e-mail','f.idea':'Describe your idea in two or three sentences',
+    'f.t0':'What do you need?','f.t1':'Landing page','f.t2':'Corporate website','f.t3':'Online store',
+    'f.t4':'Web app / client portal','f.t5':'Design & branding','f.t6':'Not sure yet, need advice',
+    'f.b0':'Approximate budget','f.b1':'up to $300','f.b2':'$300 – $800','f.b3':'$800 – $2,000','f.b4':'over $2,000','f.b5':'need your advice',
+    'f.submit':'Send request via WhatsApp',
+    'f.sent':'Done! Opening WhatsApp with your request — just hit send.',
+    'f.hint':'By submitting you agree to your data being processed so we can reply.',
+    'ft.about':'A design and web development studio. We build websites that look good and feel easy to use.',
+    'ft.contact':'Get in touch','ft.geo':'Kazakhstan · orders worldwide',
+    'ft.rights':'All rights reserved.','ft.made':'Crafted with attention to detail'
+  };
+
+  const nodes = document.querySelectorAll('[data-i18n]');
+  nodes.forEach(n => n.dataset.ru = n.textContent);
+
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    nodes.forEach(n => {
+      const key = n.dataset.i18n;
+      n.textContent = lang === 'en' ? (EN[key] || n.dataset.ru) : n.dataset.ru;
+    });
+    document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.lang === lang));
+    document.querySelectorAll('.q.open').forEach(q => { q.querySelector('.a').style.maxHeight = q.querySelector('.a').scrollHeight + 'px'; });
+    try { localStorage.setItem('ov-lang', lang); } catch(e){}
+  }
+
+  /* переключатели языка RU / EN */
+  document.querySelectorAll('.lang button').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+  /* восстанавливаем язык, выбранный при прошлом визите */
+  let savedLang = null;
+  try { savedLang = localStorage.getItem('ov-lang'); } catch(e){}
+  if (savedLang === 'en' || savedLang === 'ru') setLang(savedLang);
+
+})();
+</script>
+
+</body>
+</html>
