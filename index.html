@@ -213,6 +213,36 @@ h2{font-size:clamp(29px,5.3vw,62px);margin:0}
 .card.v4{--gl:30,30,30}.card.v5{--gl:60,60,60}.card.v6{--gl:0,0,0}
 .card::before{background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(var(--gl,0,0,0),.10),transparent 65%)}
 
+/* ============ PORTFOLIO GALLERY ============ */
+.gallery{position:relative;margin-top:44px;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--stroke);background:var(--surface);box-shadow:var(--shadow)}
+.gallery-viewport{overflow:hidden}
+.gallery-track{display:flex;will-change:transform;transition:transform .9s var(--ease)}
+.gallery-slide{position:relative;flex:0 0 100%;min-width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
+.gallery-slide img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15)}
+.gallery-slide.ph{display:grid;place-items:center;background:linear-gradient(135deg,#0a0a0a,#333)}
+.gallery-slide.ph span{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;
+  font-size:clamp(20px,4vw,40px);color:rgba(255,255,255,.5)}
+.gallery-cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(20px,4vw,40px);
+  background:linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.15) 70%,transparent);color:#fff}
+.gallery-cap h3{font-size:clamp(20px,3vw,30px);color:#fff}
+.gallery-cap p{margin-top:8px;font-size:15px;color:rgba(255,255,255,.78);max-width:60ch}
+.gallery-cap .tags{margin-top:16px}
+.gallery-cap .tag{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.85);background:rgba(255,255,255,.08)}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:48px;height:48px;
+  border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.35);backdrop-filter:blur(8px);
+  color:#fff;cursor:pointer;display:grid;place-items:center;transition:.3s var(--ease)}
+.gallery-nav:hover{background:rgba(0,0,0,.6);transform:translateY(-50%) scale(1.08)}
+.gallery-nav svg{width:20px;height:20px;stroke:#fff;stroke-width:2;fill:none}
+.gallery-prev{left:clamp(12px,2vw,22px)}
+.gallery-next{right:clamp(12px,2vw,22px)}
+.gallery-dots{position:absolute;left:0;right:0;bottom:clamp(14px,2vw,20px);z-index:3;
+  display:flex;gap:9px;justify-content:center}
+.gallery-dots button{width:9px;height:9px;padding:0;border:0;border-radius:99px;cursor:pointer;
+  background:rgba(255,255,255,.4);transition:.35s var(--ease)}
+.gallery-dots button.on{width:26px;background:#fff}
+@media(max-width:600px){.gallery-nav{width:40px;height:40px}}
+
 /* ============ PROCESS ============ */
 .steps{counter-reset:s;display:grid;gap:16px;margin-top:44px}
 .step{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,34px);align-items:start;
@@ -327,6 +357,7 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(0,
     <ul class="menu" id="menu">
       <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
       <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
+      <li><a href="#portfolio" data-i18n="nav.portfolio">Работы</a></li>
       <li><a href="#about" data-i18n="nav.about">О нас</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
       <li><a href="#contact" data-i18n="nav.contact">Контакты</a></li>
@@ -495,6 +526,55 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(0,
   </div>
 </section>
 
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="wrap">
+    <h2 class="rv"><span data-i18n="pf.h2a">Наши</span> <span class="grad-txt" data-i18n="pf.h2b">работы</span></h2>
+    <p class="sec-sub rv rv-d1" data-i18n="pf.sub">Проекты, которые мы запустили. Листайте или дайте галерее меняться самой.</p>
+    <div class="gallery rv rv-d2" id="gallery" aria-roledescription="carousel" aria-label="Портфолио OPENVISUAL">
+      <div class="gallery-viewport">
+        <div class="gallery-track" id="galleryTrack">
+          <div class="gallery-slide" role="group" aria-roledescription="slide">
+            <img src="assets/dobedan-hotel.jpg" alt="DOBEDAN Hotel" loading="lazy">
+            <div class="gallery-cap">
+              <h3 data-i18n="pf1.t">Отель DOBEDAN</h3>
+              <p data-i18n="pf1.d">Сайт парижского отеля: панорамный кадр здания, мультиязычность EN/FR/CH и элегантный сценарий бронирования.</p>
+            </div>
+          </div>
+          <div class="gallery-slide" role="group" aria-roledescription="slide">
+            <img src="assets/alibi-site.jpg" alt="ALIBI" loading="lazy">
+            <div class="gallery-cap">
+              <h3 data-i18n="pf2.t">ALIBI</h3>
+              <p data-i18n="pf2.d">Интернет-магазин одежды и аксессуаров: карточки товаров, подборка новинок и editorial-обложка на главной.</p>
+            </div>
+          </div>
+          <div class="gallery-slide" role="group" aria-roledescription="slide">
+            <img src="assets/alibi-lookbook.jpg" alt="ALIBI Lookbook" loading="lazy">
+            <div class="gallery-cap">
+              <h3 data-i18n="pf3.t">ALIBI — лукбук</h3>
+              <p data-i18n="pf3.d">Отдельная лукбук-страница: атмосферная фотосъёмка рядом с карточкой товара из коллекции.</p>
+            </div>
+          </div>
+          <div class="gallery-slide" role="group" aria-roledescription="slide">
+            <img src="assets/aa-museum.jpg" alt="AA Museum of Arts" loading="lazy">
+            <div class="gallery-cap">
+              <h3 data-i18n="pf4.t">AA Museum of Arts</h3>
+              <p data-i18n="pf4.d">Сайт музея современного искусства: галерея работ, онлайн-билеты и страница экспозиции.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="gallery-nav gallery-prev" id="galleryPrev" type="button" aria-label="Предыдущая работа">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="gallery-nav gallery-next" id="galleryNext" type="button" aria-label="Следующая работа">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="gallery-dots" id="galleryDots" role="tablist" aria-label="Слайды"></div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="faq">
   <div class="wrap">
@@ -601,6 +681,7 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(0,
       <ul class="f-links">
         <li><a href="#services" data-i18n="nav.services">Услуги</a></li>
         <li><a href="#process" data-i18n="nav.process">Процесс</a></li>
+        <li><a href="#portfolio" data-i18n="nav.portfolio">Работы</a></li>
         <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div>
@@ -748,6 +829,46 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(0,
   });
   form.addEventListener('input', e => e.target.classList.remove('err'));
 
+  /* ---------- portfolio gallery ---------- */
+  (function(){
+    const track = document.getElementById('galleryTrack');
+    if (!track) return;
+    const slides = Array.from(track.children);
+    const dotsBox = document.getElementById('galleryDots');
+    const gallery = document.getElementById('gallery');
+    let index = 0, timer = null;
+    const DELAY = 5000;
+    slides.forEach((s, i) => {
+      const d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('role', 'tab');
+      d.setAttribute('aria-label', 'Слайд ' + (i + 1));
+      d.addEventListener('click', () => { go(i); restart(); });
+      dotsBox.appendChild(d);
+    });
+    const dots = Array.from(dotsBox.children);
+    function go(i){
+      index = (i + slides.length) % slides.length;
+      track.style.transform = 'translateX(' + (-index * 100) + '%)';
+      dots.forEach((d, k) => {
+        d.classList.toggle('on', k === index);
+        d.setAttribute('aria-selected', k === index);
+      });
+    }
+    const next = () => go(index + 1);
+    const prev = () => go(index - 1);
+    function start(){ if (!reduce) timer = setInterval(next, DELAY); }
+    function stop(){ clearInterval(timer); timer = null; }
+    function restart(){ stop(); start(); }
+    document.getElementById('galleryNext').addEventListener('click', () => { next(); restart(); });
+    document.getElementById('galleryPrev').addEventListener('click', () => { prev(); restart(); });
+    gallery.addEventListener('mouseenter', stop);
+    gallery.addEventListener('mouseleave', start);
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+    go(0);
+    start();
+  })();
+
   /* ---------- i18n (RU default, EN dictionary) ---------- */
   const EN = {
     'nav.services':'Services','nav.process':'Process','nav.about':'About','nav.faq':'FAQ',
@@ -807,7 +928,18 @@ footer{border-top:1px solid var(--stroke);padding:56px 0 34px;background:rgba(0,
     'f.hint':'By submitting you agree to your data being processed so we can reply.',
     'ft.about':'A design and web development studio. We build websites that look good and feel easy to use.',
     'ft.contact':'Get in touch','ft.geo':'Kazakhstan · orders worldwide',
-    'ft.rights':'All rights reserved.','ft.made':'Crafted with attention to detail'
+    'ft.rights':'All rights reserved.','ft.made':'Crafted with attention to detail',
+    'nav.portfolio':'Work',
+    'pf.h2a':'Our','pf.h2b':'work',
+    'pf.sub':'Projects we have launched. Swipe through or let the gallery rotate on its own.',
+    'pf1.t':'DOBEDAN Hotel',
+    'pf1.d':'Website for a Parisian hotel: a panoramic building shot, EN/FR/CH multilingual support and an elegant booking flow.',
+    'pf2.t':'ALIBI',
+    'pf2.d':'Clothing and accessories online store: product cards, a curated new-arrivals selection and an editorial homepage cover.',
+    'pf3.t':'ALIBI — Lookbook',
+    'pf3.d':'A standalone lookbook page: atmospheric photography paired with a featured product from the collection.',
+    'pf4.t':'AA Museum of Arts',
+    'pf4.d':'Website for a contemporary art museum: an artwork gallery, online ticketing and an exhibition page.'
   };
 
   const nodes = document.querySelectorAll('[data-i18n]');
